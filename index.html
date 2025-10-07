@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Фотоколлаж — АПЭК</title>
+  <style>
+    :root {
+      --bg: #071029;
+      --accent: #2563eb;
+      --accent-2: #1e40af;
+      --muted: #9fb4d8;
+      --white: #eef6ff;
+      --glass: rgba(255,255,255,0.03);
+      --radius: 12px;
+    }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(800px 400px at 10% 10%, rgba(37,99,235,0.10), transparent 12%),
+        radial-gradient(700px 350px at 90% 90%, rgba(30,64,175,0.06), transparent 12%),
+        var(--bg);
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--white);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .carousel {
+      overflow: hidden;
+      position: relative;
+      width: 100%;
+      max-width: 100vw;
+    }
+
+    .carousel-track {
+      display: flex;
+      gap: 16px;
+      animation: scrollLeft linear infinite;
+      will-change: transform;
+    }
+
+    @keyframes scrollLeft {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .photo {
+      flex: 0 0 auto;
+      border-radius: var(--radius);
+      background: var(--glass);
+      box-shadow: 0 8px 24px rgba(2,6,23,0.5);
+      border: 1px solid rgba(255,255,255,0.04);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .photo img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Размеры фото: 3:4, высота 75vh, ширина = 75vh * 0.75 */
+    .photo {
+      height: 75vh;
+      width: calc(75vh * 0.75);
+    }
+
+    @media (max-width: 600px) {
+      .photo {
+        height: 75vh;
+        width: calc(75vh * 0.75);
+      }
+    }
+
+    .hint {
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--muted);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Фотоколлаж колледжа</h1>
+  <div class="carousel">
+    <div class="carousel-track" id="carousel-track"></div>
+  </div>
+  <div class="hint">Фотографии автоматически прокручиваются справа налево</div>
+
+  <script>
+  const track = document.getElementById('carousel-track');
+  const imageFolder = 'images/';
+  const pngFiles = [
+    'photo1.png',
+    'photo2.png',
+    'photo3.png',
+    'photo4.png',
+    'photo5.png'
+  ]; // просто перечисли свои файлы здесь
+
+  const secondsPerImage = 3;
+  const count = pngFiles.length;
+
+  pngFiles.forEach(name => {
+    const img = document.createElement('img');
+    img.src = imageFolder + name;
+    img.alt = name;
+    img.loading = 'lazy';
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'photo';
+    wrapper.appendChild(img);
+    track.appendChild(wrapper);
+  });
+
+  // Дублируем для бесконечной прокрутки
+  pngFiles.forEach(name => {
+    const img = document.createElement('img');
+    img.src = imageFolder + name;
+    img.alt = name;
+    img.loading = 'lazy';
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'photo';
+    wrapper.appendChild(img);
+    track.appendChild(wrapper);
+  });
+
+  const duration = count * secondsPerImage;
+  track.style.animationDuration = `${duration}s`;
+</script>
+
+</body>
+</html>
